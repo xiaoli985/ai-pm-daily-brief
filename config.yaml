@@ -1,0 +1,49 @@
+# ================= AI产品经理每日早报 配置 =================
+# 你可以自由增删资讯源、调整模型与关键词，不需要写代码，改这个文件即可。
+
+# 资讯源（RSS 聚合）
+rss_sources:
+  - name: 量子位
+    url: https://www.qbitai.com/feed
+  - name: 机器之心
+    url: https://www.jiqizhixin.com/rss
+  - name: HuggingFace Blog
+    url: https://huggingface.co/blog/feed.xml
+  - name: Product Hunt
+    url: https://www.producthunt.com/feed
+  - name: 36氪
+    url: https://36kr.com/feed
+  - name: InfoQ 中文
+    url: https://www.infoq.cn/feed
+
+# 大模型配置（默认【智谱免费模型 GLM-4.7-Flash】，完全免费、国内直连）
+# 注意：API Key 请存到 GitHub Secrets（环境变量 LLM_API_KEY），【不要】写在这个文件里
+llm:
+  base_url: "https://open.bigmodel.cn/api/paas/v4"   # 智谱开放平台
+  model: "glm-4.7-flash"                            # 免费模型
+  temperature: 0.4
+  max_tokens: 1500
+# 想换别的模型？只需改上面两行：
+#   - DeepSeek（付费但便宜）：base_url="https://api.deepseek.com"  model="deepseek-chat"
+#   - 阿里百炼（有免费额度）：base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"  model="qwen-turbo"
+#   - 硅基流动（开源模型免费）：base_url="https://api.siliconflow.cn/v1"  model="Qwen/Qwen2.5-7B-Instruct"
+
+# 每天最多处理多少条资讯（控制 token 成本，越多越贵）
+max_items: 25
+
+# 产品经理视角 Prompt（核心：决定日报质量）
+prompt: |
+  你是资深 B 端 AI 产品经理，负责每天快速扫描 AI 行业动态。下面是抓取到的原始资讯（标题+摘要）。
+  请：
+  1. 过滤掉纯学术论文细节、纯底层技术实现、标题党和水文；只保留对【AI 产品、商业化、模型发布、竞品动作、定价/API 政策、客户落地案例、行业趋势】有价值的信息。
+  2. 按以下分类归并：模型与能力更新 / 产品发布与竞品 / 商业化与定价 / 行业趋势与政策 / 开源与生态 / 值得关注。
+  3. 每条资讯输出统一格式：
+     ### 标题
+     **来源**：xxx
+     **一句话摘要**：...
+     **【产品经理视角】**：站在 B 端 AI 产品经理角度，这条信息对产品方案/成本/竞品/机会点的影响是什么？1-2 句，口语化、有判断，不要套话。
+  4. 去掉重复或过于相似的资讯。
+  5. 最后加一段「今日一句话总结」：今天 AI 圈最值得产品经理关注的一件事及其原因。
+  6. 用 Markdown 输出，中文，简洁，不要输出无关内容。
+  资讯内容：
+  {content}
